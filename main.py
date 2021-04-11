@@ -19,8 +19,8 @@ validation_set = initial_training_set.iloc[80:, :]
 
 test_set = pd.read_csv("comp3208-test.csv", low_memory=False, header=None, names=["user", "itemID", "timestamp"])
 
-#u1 and u2 are lists of ratings for the same items from user1 and user2
-#Returns the similarity measure for user1 and user2
+# u1 and u2 are lists of ratings for the same items from user1 and user2
+# Returns the similarity measure for user1 and user2
 def sim(u1, u2):
 
     mean_u1 = sum(u1)/len(u1)
@@ -42,8 +42,8 @@ def sim(u1, u2):
 
     return (sum_u1*sum_u2)/(math.sqrt(sum_sqr_u1)*math.sqrt(sum_sqr_u2))
 
-#ToDo
-#Given two users user1 and user2 create a list of ratings for items that both user1 and user2 have reviewed
+# ToDo
+# Given two users user1 and user2 create a list of ratings for items that both user1 and user2 have reviewed
 def calculate_sim(user1, user2):
 
     u1 = {}
@@ -51,14 +51,22 @@ def calculate_sim(user1, user2):
 
     return sim(u1, u2)
 
-#ToDo Function to get ratings for a given user
+# ToDo Function to get ratings for a given user
 def get_ratings(user):
+    ratings = training_set.loc[training_set['user' == user], ['ratings']].iloc[0]
+    # Need to test exactly what data type this variable is, may need to add an extra argument to the command
 
-#ToDo Function to get rating for a specific item from a specific user
+    return ratings
+
+# ToDo Function to get rating for a specific item from a specific user
 def get_single_rating(user, item):
+    single_rating = training_set.loc[training_set['user' == user], training_set['item' == item]].iloc[0].item()
+    # need to check what index in the iloc to give the right rating
 
-#Given a user, item and list of neighbours
-#Returns a predicted rating for the item by the user
+    return  single_rating
+
+# Given a user, item and list of neighbours
+# Returns a predicted rating for the item by the user
 def pred(user, item, neighbours):
 
     user_ratings = get_ratings(user)
