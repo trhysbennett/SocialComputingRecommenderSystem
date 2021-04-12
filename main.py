@@ -39,16 +39,24 @@ def sim(u1, u2):
         sum_u2 += i - mean_u2
         sum_sqr_u2 += (i - mean_u2) ^ 2
 
+    print((sum_u1 * sum_u2) / (math.sqrt(sum_sqr_u1) * math.sqrt(sum_sqr_u2)))
     return (sum_u1 * sum_u2) / (math.sqrt(sum_sqr_u1) * math.sqrt(sum_sqr_u2))
 
 
 # ToDo
 # Given two users user1 and user2 create a list of ratings for items that both user1 and user2 have reviewed
 def calculate_sim(user1, user2):
-    u1_items = initial_training_set.loc[initial_training_set['user'] == user1, ['itemID']].iloc[:, 0]
+    u1_items = list(initial_training_set.loc[initial_training_set['user'] == user1, ['itemID']].iloc[:, 0])
 
-    u1 = {}
-    u2 = {}
+    u1 = []
+    u2 = []
+
+    for item in u1_items:
+        try:
+            u1.append(get_single_rating(user1, item))
+            u2.append(get_single_rating(user2, item))
+        except:
+            print("Item not rated by user2")
 
     return sim(u1, u2)
 
@@ -99,5 +107,4 @@ def pred(user, item):
     return mean_user_rating + (numerator / denominator)
 
 
-get_ratings(2)
-get_single_rating(1, 34512)
+calculate_sim(1, 2)
