@@ -10,10 +10,13 @@ initial_training_set = pd.read_csv("comp3208-train.csv", low_memory=False, heade
 initial_training_set = initial_training_set.sample(frac=1)
 
 # splitting the training set into a training set (80%) and a validation set (20%) to use
+# TODO actually do a percentage
 training_set = initial_training_set.iloc[:80, :]
 validation_set = initial_training_set.iloc[80:, :]
 
 test_set = pd.read_csv("comp3208-test.csv", low_memory=False, header=None, names=["user", "itemID", "timestamp"])
+
+print(initial_training_set['user'])
 
 
 # u1 and u2 are lists of ratings for the same items from user1 and user2
@@ -42,6 +45,8 @@ def sim(u1, u2):
 # ToDo
 # Given two users user1 and user2 create a list of ratings for items that both user1 and user2 have reviewed
 def calculate_sim(user1, user2):
+    u1_items = initial_training_set.loc[initial_training_set['user'] == user1, ['itemID']].iloc[:, 0]
+
     u1 = {}
     u2 = {}
 
@@ -49,21 +54,19 @@ def calculate_sim(user1, user2):
 
 
 # ToDo Function to get ratings for a given user
+# Need to switch off initial training set
 def get_ratings(user):
-    ratings = training_set.loc[training_set['user' == user], ['ratings']].iloc[0]
+    ratings = initial_training_set.loc[initial_training_set['user'] == user, ['rating']].iloc[:, 0]
     # Need to test exactly what data type this variable is, may need to add an extra argument to the command
 
-    print(ratings)
-
-    return ratings
+    return list(ratings)
 
 
 # ToDo Function to get rating for a specific item from a specific user
 def get_single_rating(user, item):
-    single_rating = training_set.loc[training_set['user' == user], training_set['item' == item]].iloc[0].item()
+    single_rating = initial_training_set.loc[(initial_training_set['user'] == user) &
+                                             (initial_training_set['itemID'] == item), ['rating']].iloc[0].item()
     # need to check what index in the iloc to give the right rating
-
-    print(single_rating)
 
     return single_rating
 
@@ -97,3 +100,4 @@ def pred(user, item):
 
 
 get_ratings(2)
+get_single_rating(1, 34512)
