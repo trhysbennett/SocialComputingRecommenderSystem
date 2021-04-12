@@ -9,6 +9,9 @@ initial_training_set = pd.read_csv("comp3208-train.csv", low_memory=False, heade
 # shuffle the rows in the data frame to make it unique with each run
 initial_training_set = initial_training_set.sample(frac=1)
 
+initial_training_set.apply(lambda rating: pd.to_numeric(rating, errors='coerce')).dropna()
+initial_training_set = initial_training_set[(initial_training_set > 0).all(axis=1)]
+
 # splitting the training set into a training set (80%) and a validation set (20%) to use
 # TODO actually do a percentage
 training_set = initial_training_set.iloc[:80, :]
@@ -43,7 +46,6 @@ def sim(u1, u2):
     return (sum_u1 * sum_u2) / (math.sqrt(sum_sqr_u1) * math.sqrt(sum_sqr_u2))
 
 
-# ToDo
 # Given two users user1 and user2 create a list of ratings for items that both user1 and user2 have reviewed
 def calculate_sim(user1, user2):
     u1_items = list(initial_training_set.loc[initial_training_set['user'] == user1, ['itemID']].iloc[:, 0])
@@ -61,8 +63,8 @@ def calculate_sim(user1, user2):
     return sim(u1, u2)
 
 
-# ToDo Function to get ratings for a given user
-# Need to switch off initial training set
+# Function to get ratings for a given user
+# ToDo Need to switch off initial training set
 def get_ratings(user):
     ratings = initial_training_set.loc[initial_training_set['user'] == user, ['rating']].iloc[:, 0]
     # Need to test exactly what data type this variable is, may need to add an extra argument to the command
@@ -70,7 +72,7 @@ def get_ratings(user):
     return list(ratings)
 
 
-# ToDo Function to get rating for a specific item from a specific user
+# Function to get rating for a specific item from a specific user
 def get_single_rating(user, item):
     single_rating = initial_training_set.loc[(initial_training_set['user'] == user) &
                                              (initial_training_set['itemID'] == item), ['rating']].iloc[0].item()
