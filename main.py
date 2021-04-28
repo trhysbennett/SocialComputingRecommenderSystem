@@ -105,6 +105,3 @@ def pred(user, item):
         denominator += calculate_sim(user, neighbour)
 
     return mean_user_rating + (numerator / denominator)
-
-
-print(pred(1, 46886))
